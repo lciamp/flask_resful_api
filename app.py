@@ -3,6 +3,7 @@ from flask_restful import Resource, Api
 
 
 app = Flask(__name__)
+app.secret_key = 'my_key'
 api = Api(app)
 
 
@@ -17,7 +18,7 @@ class ItemList(Resource):
 class Item(Resource):
     def get(self, name):
         item = next(iter([item for item in items if item['name'] == name]), None)
-        return {'item': item}, 200 if item else 404
+        return ({'item': item}, 200) if item else ({"message": "item '{}' not found".format(name)}, 404)
 
     def post(self, name):
         if next(iter([item for item in items if item['name'] == name]), None):
